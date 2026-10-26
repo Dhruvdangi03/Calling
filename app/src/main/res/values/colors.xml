@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Core couple-theme palette (light) -->
+    <color name="blush_primary">#F28DA8</color>
+    <color name="blush_primary_dark">#D96E8C</color>
+    <color name="blush_primary_light">#FBD8E2</color>
+    <color name="plum_accent">#6B3F55</color>
+    <color name="warm_background">#FFF6F8</color>
+    <color name="warm_surface">#FFFFFF</color>
+    <color name="warm_on_primary">#FFFFFF</color>
+    <color name="warm_on_background">#3A2530</color>
+    <color name="warm_on_surface_variant">#8A6A74</color>
+
+    <!-- Status colors used in call history / banners -->
+    <color name="status_answered">#4CAF82</color>
+    <color name="status_missed">#E0A23A</color>
+    <color name="status_declined">#B0A5A9</color>
+    <color name="status_error">#D9534F</color>
+
+    <color name="ic_launcher_background">#F28DA8</color>
+</resources>

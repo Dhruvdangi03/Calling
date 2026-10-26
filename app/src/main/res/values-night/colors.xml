@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Deep plum dark-mode variant of the couple theme -->
+    <color name="blush_primary">#E8769A</color>
+    <color name="blush_primary_dark">#C65A7D</color>
+    <color name="blush_primary_light">#4A2E3A</color>
+    <color name="plum_accent">#E6B8C8</color>
+    <color name="warm_background">#241A1F</color>
+    <color name="warm_surface">#2E2127</color>
+    <color name="warm_on_primary">#FFFFFF</color>
+    <color name="warm_on_background">#F3E3E9</color>
+    <color name="warm_on_surface_variant">#C2A0AB</color>
+
+    <color name="status_answered">#6FCB9F</color>
+    <color name="status_missed">#EFC26B</color>
+    <color name="status_declined">#8A7B80</color>
+    <color name="status_error">#E8837F</color>
+</resources>

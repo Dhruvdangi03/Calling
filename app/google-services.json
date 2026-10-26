@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "132078258605",
+    "project_id": "calling-83fe4",
+    "storage_bucket": "calling-83fe4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:132078258605:android:8d2d06b13ac75330c4f924",
+        "android_client_info": {
+          "package_name": "com.ddangi.calling"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXE51XhRLopsVMLVg-EF7zctWrP7URePw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,16 @@
+*.iml
+.gradle/
+local.properties
+.idea/
+.DS_Store
+build/
+captures/
+.externalNativeBuild/
+.cxx/
+app/release/
+
+# Real Firebase config and secrets — never commit the real versions of these.
+# The placeholder google-services.json checked in lets the project compile
+# before you've created a Firebase project; replace it with your real one
+# (see the setup guide) but do not commit your real file if this repo is
+# ever made public.

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/warm_background"
+    tools:context=".ui.home.HomeActivity">
+
+    <ImageView
+        android:id="@+id/imagePartnerPhoto"
+        android:layout_width="104dp"
+        android:layout_height="104dp"
+        android:layout_marginTop="56dp"
+        android:background="@drawable/bg_partner_photo_placeholder"
+        android:contentDescription="@null"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textPartnerName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:textColor="@color/warm_on_background"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imagePartnerPhoto"
+        tools:text="Partner name" />
+
+    <TextView
+        android:id="@+id/textLastCalled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="@string/home_last_called_never"
+        android:textColor="@color/warm_on_surface_variant"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textPartnerName" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonAudioCall"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@color/blush_primary"
+        android:enabled="false"
+        android:text="@string/home_call_audio"
+        android:textColor="@color/warm_on_primary"
+        app:cornerRadius="32dp"
+        app:icon="@drawable/ic_call_audio"
+        app:iconTint="@color/warm_on_primary"
+        app:layout_constraintEnd_toStartOf="@id/buttonVideoCall"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textLastCalled" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/buttonVideoCall"
+        android:layout_width="0dp"
+        android:layout_height="64dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="24dp"
+        android:backgroundTint="@color/plum_accent"
+        android:enabled="false"
+        android:text="@string/home_call_video"
+        android:textColor="@color/warm_on_primary"
+        app:cornerRadius="32dp"
+        app:icon="@drawable/ic_call_video"
+        app:iconTint="@color/warm_on_primary"
+        app:layout_constraintBottom_toBottomOf="@id/buttonAudioCall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/buttonAudioCall"
+        app:layout_constraintTop_toTopOf="@id/buttonAudioCall" />
+
+    <TextView
+        android:id="@+id/textHistoryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/home_history_title"
+        android:textColor="@color/warm_on_background"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/buttonAudioCall" />
+
+    <TextView
+        android:id="@+id/textHistoryEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/home_history_empty"
+        android:textColor="@color/warm_on_surface_variant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textHistoryTitle" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerCallHistory"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textHistoryTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

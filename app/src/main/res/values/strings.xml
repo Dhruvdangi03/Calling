@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Calling</string>
+
+    <string name="login_title">Welcome back</string>
+    <string name="login_subtitle">Sign in to call them</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_button">Log in</string>
+    <string name="login_error_generic">Couldn\'t log in. Check your email and password.</string>
+
+    <string name="home_last_called_never">You haven\'t called yet</string>
+    <string name="home_call_audio">Audio call</string>
+    <string name="home_call_video">Video call</string>
+    <string name="home_history_title">Recent calls</string>
+    <string name="home_history_empty">No calls yet</string>
+</resources>
