@@ -7,7 +7,9 @@ import com.ddangi.calling.Constants;
 import com.ddangi.calling.data.model.CallModel;
 import com.ddangi.calling.data.model.CallStatus;
 import com.ddangi.calling.data.model.CallType;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.ListenerRegistration;
@@ -28,6 +30,14 @@ public class CallRepository {
         void onCallChanged(@Nullable CallModel call);
 
         void onError(String message);
+    }
+
+    public interface SdpListener {
+        void onSdpAvailable(@NonNull String sdp);
+    }
+
+    public interface IceCandidateListener {
+        void onCandidateAdded(@NonNull String candidate, @Nullable String sdpMid, int sdpMLineIndex);
     }
 
     private final FirebaseFirestore firestore;
@@ -124,6 +134,94 @@ public class CallRepository {
                         listener.onCallChanged(call);
                     }
                 });
+    }
+
+    // --- SDP signaling (calls/{callId}/signaling/offer|answer) ---
+
+    public void sendOffer(@NonNull String callId, @NonNull String sdp) {
+        writeSdp(callId, Constants.DOC_OFFER, sdp);
+    }
+
+    public ListenerRegistration listenForOffer(@NonNull String callId, @NonNull SdpListener listener) {
+        return listenForSdp(callId, Constants.DOC_OFFER, listener);
+    }
+
+    public void sendAnswer(@NonNull String callId, @NonNull String sdp) {
+        writeSdp(callId, Constants.DOC_ANSWER, sdp);
+    }
+
+    public ListenerRegistration listenForAnswer(@NonNull String callId, @NonNull SdpListener listener) {
+        return listenForSdp(callId, Constants.DOC_ANSWER, listener);
+    }
+
+    private void writeSdp(@NonNull String callId, @NonNull String docId, @NonNull String sdp) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(Constants.FIELD_SDP, sdp);
+        data.put(Constants.FIELD_CREATED_AT, FieldValue.serverTimestamp());
+
+        firestore.collection(Constants.COLLECTION_CALLS).document(callId)
+                .collection(Constants.SUBCOLLECTION_SIGNALING).document(docId)
+                .set(data);
+    }
+
+    private ListenerRegistration listenForSdp(@NonNull String callId, @NonNull String docId, @NonNull SdpListener listener) {
+        return firestore.collection(Constants.COLLECTION_CALLS).document(callId)
+                .collection(Constants.SUBCOLLECTION_SIGNALING).document(docId)
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null || snapshot == null || !snapshot.exists()) {
+                        return;
+                    }
+                    String sdp = snapshot.getString(Constants.FIELD_SDP);
+                    if (sdp != null) {
+                        listener.onSdpAvailable(sdp);
+                    }
+                });
+    }
+
+    // --- ICE candidate exchange (calls/{callId}/callerCandidates|calleeCandidates) ---
+
+    /**
+     * fromCaller selects WHO GENERATED the candidate (not the local role): each side writes its
+     * own candidates to its own subcollection and listens to the other side's.
+     */
+    public void addIceCandidate(@NonNull String callId, boolean fromCaller,
+                                 @NonNull String candidate, @Nullable String sdpMid, int sdpMLineIndex) {
+        Map<String, Object> data = new HashMap<>();
+        data.put(Constants.FIELD_CANDIDATE, candidate);
+        data.put(Constants.FIELD_SDP_MID, sdpMid);
+        data.put(Constants.FIELD_SDP_MLINE_INDEX, sdpMLineIndex);
+        data.put(Constants.FIELD_CREATED_AT, FieldValue.serverTimestamp());
+
+        firestore.collection(Constants.COLLECTION_CALLS).document(callId)
+                .collection(candidatesSubcollection(fromCaller))
+                .add(data);
+    }
+
+    public ListenerRegistration listenForIceCandidates(@NonNull String callId, boolean fromCaller,
+                                                        @NonNull IceCandidateListener listener) {
+        return firestore.collection(Constants.COLLECTION_CALLS).document(callId)
+                .collection(candidatesSubcollection(fromCaller))
+                .addSnapshotListener((snapshot, error) -> {
+                    if (error != null || snapshot == null) {
+                        return;
+                    }
+                    for (DocumentChange change : snapshot.getDocumentChanges()) {
+                        if (change.getType() != DocumentChange.Type.ADDED) {
+                            continue;
+                        }
+                        DocumentSnapshot doc = change.getDocument();
+                        String candidate = doc.getString(Constants.FIELD_CANDIDATE);
+                        String sdpMid = doc.getString(Constants.FIELD_SDP_MID);
+                        Long sdpMLineIndex = doc.getLong(Constants.FIELD_SDP_MLINE_INDEX);
+                        if (candidate != null && sdpMLineIndex != null) {
+                            listener.onCandidateAdded(candidate, sdpMid, sdpMLineIndex.intValue());
+                        }
+                    }
+                });
+    }
+
+    private String candidatesSubcollection(boolean fromCaller) {
+        return fromCaller ? Constants.SUBCOLLECTION_CALLER_CANDIDATES : Constants.SUBCOLLECTION_CALLEE_CANDIDATES;
     }
 
     private String describe(Exception e) {

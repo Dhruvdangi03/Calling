@@ -1,0 +1,45 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // This app only ever has exactly two accounts (a couple). Replace these with the two real
+    // Firebase Auth UIDs from Firebase Console -> Authentication -> Users before deploying.
+    function isKnownUser() {
+      return request.auth != null &&
+        request.auth.uid in ['REPLACE_WITH_UID_A', 'REPLACE_WITH_UID_B'];
+    }
+
+    match /users/{uid} {
+      allow read: if isKnownUser();
+      allow write: if isKnownUser() && request.auth.uid == uid;
+    }
+
+    match /calls/{callId} {
+      allow read: if isKnownUser();
+      allow create: if isKnownUser() && request.auth.uid == request.resource.data.callerUid;
+      allow update: if isKnownUser() &&
+        (request.auth.uid == resource.data.callerUid || request.auth.uid == resource.data.calleeUid);
+      allow delete: if false;
+
+      match /signaling/{docId} {
+        allow read, write: if isKnownUser();
+      }
+
+      match /callerCandidates/{candidateId} {
+        allow read: if isKnownUser();
+        allow create: if isKnownUser();
+        allow update, delete: if false;
+      }
+
+      match /calleeCandidates/{candidateId} {
+        allow read: if isKnownUser();
+        allow create: if isKnownUser();
+        allow update, delete: if false;
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
